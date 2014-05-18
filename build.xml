@@ -1,0 +1,41 @@
+<project default="run">
+
+	<property name="project.name" value="scm-time-lapse"/>
+	<property name="project.mainClass" value="com.jonathanaquino.svntimelapseview.Application"/>
+
+	<path id="cp.path">
+        	<fileset dir="lib">
+            		<include name="**/*.jar"/>
+            		<exclude name="**/junit*.jar"/>
+            		<exclude name="**/*test*.jar"/>
+        	</fileset>
+    	</path>
+	<target name="clean">
+		<delete dir="target"/>
+	</target>
+
+	<target name="compile" depends="clean">
+       		<mkdir dir="target/classes"/>
+    		<javac srcdir="src" destdir="target/classes" classpath="lib">
+			<classpath refid="cp.path"/>
+		</javac>	
+	</target>
+
+	<target name="jar" depends="compile">
+        	<mkdir dir="target/"/>
+		<jar destfile="target/${project.name}.jar" basedir="target/classes">
+			<manifest>
+				<attribute name="Main-Class" value=""/>
+			</manifest>
+        	</jar>
+	</target>
+
+	<target name="run" depends="jar">
+		<java classname="${project.mainClass}" fork="true">
+			<classpath>
+				<path location="target/${project.name}.jar"/>
+				<path refid="cp.path"/>
+			</classpath>
+		</java>	
+	</target>
+</project>
